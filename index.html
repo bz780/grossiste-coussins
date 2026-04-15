@@ -160,7 +160,9 @@ header { background: var(--white); border-bottom: 1px solid var(--border); posit
 .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 20px; }
 .product-card { background: var(--white); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--border); transition: transform .2s, box-shadow .2s; }
 .product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
-.product-thumb { height: 150px; display: flex; align-items: center; justify-content: center; font-size: 3rem; position: relative; }
+.product-thumb { height: 200px; position: relative; overflow: hidden; }
+.product-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .3s ease; }
+.product-card:hover .product-thumb img { transform: scale(1.04); }
 .product-badge { position: absolute; top: 10px; left: 10px; font-size: .7rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; }
 .badge-best { background: var(--primary); color: #fff; }
 .badge-premium { background: var(--ink); color: #fff; }
@@ -234,7 +236,7 @@ header { background: var(--white); border-bottom: 1px solid var(--border); posit
 
 /* SEGMENTS */
 #segments { background: var(--white); }
-.segments-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-top: 44px; }
+.segments-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 44px; }
 .segment-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 20px; text-align: center; transition: transform .2s, box-shadow .2s; }
 .segment-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
 .segment-icon { font-size: 2rem; margin-bottom: 10px; }
@@ -423,8 +425,8 @@ footer { background: var(--ink); color: rgba(255,255,255,.6); padding: 48px 0 24
 <section id="catalogue" class="section">
   <div class="container">
     <span class="tag">Catalogue grossiste</span>
-    <h2 class="section-title">Coussins en gros — Sélection 2026</h2>
-    <p class="section-desc">Tous les prix sont indiqués HT, par pièce, au tarif Découverte (dès 50 pcs). Des remises supplémentaires s'appliquent à partir de 200 et 500 pièces.</p>
+    <h2 class="section-title">Coussins en gros</h2>
+    <p class="section-desc">+800 références en stock permanent. Tarifs dégressifs selon volume — prix sur devis dès 50 pièces. Chaque produit disponible en mix coloris et tailles.</p>
 
     <div class="filters">
       <button class="filter-btn active" data-cat="all">Tous</button>
@@ -439,8 +441,8 @@ footer { background: var(--ink); color: rgba(255,255,255,.6); padding: 48px 0 24
 
       <!-- 1 -->
       <div class="product-card" data-cat="velours">
-        <div class="product-thumb thumb-velours">
-          <span>🛋️</span>
+        <div class="product-thumb">
+          <img src="/images/coussin-velours-uni.jpg" alt="Coussin velours uni terracotta 40x40 cm en gros" width="400" height="400" loading="lazy">
           <span class="product-badge badge-best">Bestseller</span>
         </div>
         <div class="product-body">
@@ -451,20 +453,14 @@ footer { background: var(--ink); color: rgba(255,255,255,.6); padding: 48px 0 24
             <span class="meta-chip">32 coloris</span>
             <span class="meta-chip">OEKO-TEX</span>
           </div>
-          <div class="product-pricing">
-            <span class="price-current">2,90 €</span>
-            <span class="price-old">4,20 €</span>
-            <span class="price-unit">HT/pièce</span>
-          </div>
-          <p class="product-moq">MOQ : <strong>50 pièces</strong> (mix coloris possible)</p>
           <a href="#contact" class="btn-product">Demander un devis</a>
         </div>
       </div>
 
       <!-- 2 -->
       <div class="product-card" data-cat="lin">
-        <div class="product-thumb thumb-lin">
-          <span>🌾</span>
+        <div class="product-thumb">
+          <img src="/images/coussin-lin-naturel.jpg" alt="Coussin lin naturel lavé bohème en gros" width="400" height="400" loading="lazy">
           <span class="product-badge badge-premium">Premium</span>
         </div>
         <div class="product-body">
@@ -475,20 +471,14 @@ footer { background: var(--ink); color: rgba(255,255,255,.6); padding: 48px 0 24
             <span class="meta-chip">Lin OEKO-TEX</span>
             <span class="meta-chip">14 teintes</span>
           </div>
-          <div class="product-pricing">
-            <span class="price-current">4,50 €</span>
-            <span class="price-old">6,90 €</span>
-            <span class="price-unit">HT/pièce</span>
-          </div>
-          <p class="product-moq">MOQ : <strong>30 pièces</strong></p>
           <a href="#contact" class="btn-product">Demander un devis</a>
         </div>
       </div>
 
       <!-- 3 -->
       <div class="product-card" data-cat="imprime">
-        <div class="product-thumb thumb-imprime">
-          <span>🌸</span>
+        <div class="product-thumb">
+          <img src="/images/coussin-velours-imprime.jpg" alt="Coussin velours imprimé motifs botaniques en gros" width="400" height="400" loading="lazy">
           <span class="product-badge badge-new">Nouveauté</span>
         </div>
         <div class="product-body">
@@ -499,44 +489,32 @@ footer { background: var(--ink); color: rgba(255,255,255,.6); padding: 48px 0 24
             <span class="meta-chip">20 motifs</span>
             <span class="meta-chip">Impression HD</span>
           </div>
-          <div class="product-pricing">
-            <span class="price-current">3,80 €</span>
-            <span class="price-old">5,50 €</span>
-            <span class="price-unit">HT/pièce</span>
-          </div>
-          <p class="product-moq">MOQ : <strong>50 pièces</strong></p>
           <a href="#contact" class="btn-product">Demander un devis</a>
         </div>
       </div>
 
       <!-- 4 -->
       <div class="product-card" data-cat="lin">
-        <div class="product-thumb thumb-coton">
-          <span>🧶</span>
+        <div class="product-thumb">
+          <img src="/images/coussin-coton-boheme.jpg" alt="Coussin coton bohème pompons ethnique en gros" width="400" height="400" loading="lazy">
           <span class="product-badge badge-premium">Tendance</span>
         </div>
         <div class="product-body">
           <h3>Coussin Coton Bohème Pompons</h3>
-          <p class="product-desc">Coton tissé main, pompons de couleur sur les 4 coins, motif ethnique. Esprit boho-chic 2026.</p>
+          <p class="product-desc">Coton tissé main, pompons de couleur sur les 4 coins, motif ethnique. Esprit boho-chic.</p>
           <div class="product-meta">
             <span class="meta-chip">40×40 / 50×50</span>
             <span class="meta-chip">Coton tissé</span>
             <span class="meta-chip">Pompons</span>
           </div>
-          <div class="product-pricing">
-            <span class="price-current">5,20 €</span>
-            <span class="price-old">7,80 €</span>
-            <span class="price-unit">HT/pièce</span>
-          </div>
-          <p class="product-moq">MOQ : <strong>30 pièces</strong></p>
           <a href="#contact" class="btn-product">Demander un devis</a>
         </div>
       </div>
 
       <!-- 5 -->
       <div class="product-card" data-cat="ext">
-        <div class="product-thumb thumb-ext">
-          <span>☀️</span>
+        <div class="product-thumb">
+          <img src="/images/coussin-exterieur.jpg" alt="Coussin extérieur imperméable anti-UV terrasse jardin en gros" width="400" height="400" loading="lazy">
           <span class="product-badge badge-pro">Extérieur Pro</span>
         </div>
         <div class="product-body">
@@ -547,45 +525,33 @@ footer { background: var(--ink); color: rgba(255,255,255,.6); padding: 48px 0 24
             <span class="meta-chip">Anti-UV cl.6</span>
             <span class="meta-chip">Lavable 60°C</span>
           </div>
-          <div class="product-pricing">
-            <span class="price-current">6,90 €</span>
-            <span class="price-old">9,90 €</span>
-            <span class="price-unit">HT/pièce</span>
-          </div>
-          <p class="product-moq">MOQ : <strong>20 pièces</strong></p>
           <a href="#contact" class="btn-product">Demander un devis</a>
         </div>
       </div>
 
       <!-- 6 -->
       <div class="product-card" data-cat="xxl">
-        <div class="product-thumb thumb-xxl">
-          <span>💜</span>
+        <div class="product-thumb">
+          <img src="/images/coussin-grand-velours.jpg" alt="Grand coussin velours XXL 60x60 cm mauve en gros" width="400" height="400" loading="lazy">
           <span class="product-badge badge-pro">XXL</span>
         </div>
         <div class="product-body">
           <h3>Grand Coussin Velours 60×60</h3>
-          <p class="product-desc">Format XXL salon & lit, velours premium 500 g/m², garnissage 600g bi-ball. 18 coloris tendance 2026.</p>
+          <p class="product-desc">Format XXL salon & lit, velours premium 500 g/m², garnissage 600g bi-ball. 18 coloris tendance.</p>
           <div class="product-meta">
             <span class="meta-chip">60×60 cm</span>
             <span class="meta-chip">500 g/m²</span>
             <span class="meta-chip">18 coloris</span>
           </div>
-          <div class="product-pricing">
-            <span class="price-current">8,90 €</span>
-            <span class="price-old">13,50 €</span>
-            <span class="price-unit">HT/pièce</span>
-          </div>
-          <p class="product-moq">MOQ : <strong>20 pièces</strong></p>
           <a href="#contact" class="btn-product">Demander un devis</a>
         </div>
       </div>
 
       <!-- 7 -->
       <div class="product-card" data-cat="xxl">
-        <div class="product-thumb thumb-tricot">
-          <span>🍂</span>
-          <span class="product-badge badge-new">Hiver 2026</span>
+        <div class="product-thumb">
+          <img src="/images/coussin-tricot.jpg" alt="Coussin maille tricot chunky cocooning scandinave en gros" width="400" height="400" loading="lazy">
+          <span class="product-badge badge-new">Nouveauté hiver</span>
         </div>
         <div class="product-body">
           <h3>Coussin Maille Tricot</h3>
@@ -595,20 +561,14 @@ footer { background: var(--ink); color: rgba(255,255,255,.6); padding: 48px 0 24
             <span class="meta-chip">Maille chunky</span>
             <span class="meta-chip">10 coloris</span>
           </div>
-          <div class="product-pricing">
-            <span class="price-current">7,50 €</span>
-            <span class="price-old">11,00 €</span>
-            <span class="price-unit">HT/pièce</span>
-          </div>
-          <p class="product-moq">MOQ : <strong>20 pièces</strong></p>
           <a href="#contact" class="btn-product">Demander un devis</a>
         </div>
       </div>
 
       <!-- 8 -->
       <div class="product-card" data-cat="velours">
-        <div class="product-thumb thumb-simili">
-          <span>🖤</span>
+        <div class="product-thumb">
+          <img src="/images/coussin-simili-cuir.jpg" alt="Coussin simili cuir mat minimaliste hôtellerie en gros" width="400" height="400" loading="lazy">
           <span class="product-badge badge-premium">Premium</span>
         </div>
         <div class="product-body">
@@ -619,12 +579,6 @@ footer { background: var(--ink); color: rgba(255,255,255,.6); padding: 48px 0 24
             <span class="meta-chip">Simili cuir</span>
             <span class="meta-chip">Usage CHR</span>
           </div>
-          <div class="product-pricing">
-            <span class="price-current">9,90 €</span>
-            <span class="price-old">14,50 €</span>
-            <span class="price-unit">HT/pièce</span>
-          </div>
-          <p class="product-moq">MOQ : <strong>20 pièces</strong></p>
           <a href="#contact" class="btn-product">Demander un devis</a>
         </div>
       </div>
