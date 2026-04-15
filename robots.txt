@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.grossiste-coussins.fr/sitemap.xml
