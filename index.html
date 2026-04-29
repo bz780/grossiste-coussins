@@ -1024,6 +1024,7 @@ document.getElementById('contact-form').addEventListener('submit', async functio
   const msg = document.getElementById('form-msg');
   const form = this;
 
+  if (btn.disabled) return;
   if (!form.checkValidity()) { form.reportValidity(); return; }
 
   btn.textContent = 'Envoi en cours…';
