@@ -307,6 +307,7 @@ footer { background: var(--ink); color: rgba(255,255,255,.6); padding: 48px 0 24
 .footer-bottom { border-top: 1px solid rgba(255,255,255,.08); padding-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; font-size: .8rem; }
 @media (max-width: 600px) { .footer-grid { grid-template-columns: 1fr; } .footer-bottom { flex-direction: column; text-align: center; } }
 </style>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
 </head>
 <body>
 
@@ -908,7 +909,13 @@ footer { background: var(--ink); color: rgba(255,255,255,.6); padding: 48px 0 24
 
       <div class="contact-form">
         <h3>Votre demande de devis</h3>
-        <form id="contact-form" novalidate>
+        <form class="contact-form" id="contact-form" novalidate>
+<input type="hidden" name="_subject" value="Demande devis — grossiste coussins">
+<input type="hidden" name="_honeypot" value="">
+<input type="hidden" name="_captcha" value="false">
+<input type="hidden" name="_template" value="table">
+<input type="text" name="_gotcha" style="display:none !important;position:absolute;left:-9999px" tabindex="-1" autocomplete="off" aria-hidden="true">
+<input type="hidden" name="_form_started_at" value="">
           <div class="form-row">
             <div class="form-group">
               <label for="prenom">Prénom *</label>
@@ -949,7 +956,9 @@ footer { background: var(--ink); color: rgba(255,255,255,.6); padding: 48px 0 24
             <textarea id="besoin" name="besoin" placeholder="Ex : 200 coussins velours 40×40 mix coloris automne, livraison avant le 15 du mois…"></textarea>
           </div>
           <input type="text" name="_honeypot" style="display:none" tabindex="-1" autocomplete="off">
-          <button type="submit" class="btn-submit" id="submit-btn">Envoyer ma demande →</button>
+          
+<div class="cf-turnstile" data-sitekey="0x4AAAAAADFQDtKGYbZUTtyX" data-theme="light" data-size="flexible" style="margin:14px 0"></div>
+<button type="submit" class="btn-submit" id="submit-btn">Envoyer ma demande →</button>
           <div class="form-msg" id="form-msg"></div>
         </form>
       </div>
@@ -1005,58 +1014,76 @@ footer { background: var(--ink); color: rgba(255,255,255,.6); padding: 48px 0 24
 </footer>
 
 <script>
-// Filter
-document.querySelectorAll('.filter-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    const cat = btn.dataset.cat;
-    document.querySelectorAll('.product-card').forEach(card => {
-      card.style.display = (cat === 'all' || card.dataset.cat === cat) ? '' : 'none';
-    });
-  });
-});
+/* Formsubmit AJAX handler — v2 (turnstile+timing) */
+(function () {
+  const form = document.querySelector('.contact-form');
+  if (!form) return;
+  form.setAttribute('novalidate', '');
 
-// Contact form
-document.getElementById('contact-form').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const btn = document.getElementById('submit-btn');
-  const msg = document.getElementById('form-msg');
-  const form = this;
+  const formStartTime = Date.now();
+  const tsField = form.querySelector('input[name="_form_started_at"]');
+  if (tsField) tsField.value = String(formStartTime);
 
-  if (btn.disabled) return;
-  if (!form.checkValidity()) { form.reportValidity(); return; }
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
 
-  btn.textContent = 'Envoi en cours…';
-  btn.disabled = true;
-  msg.className = 'form-msg';
-
-  const data = new FormData(form);
-  data.append('_subject', 'Devis grossiste coussins — ' + (data.get('societe') || data.get('prenom')));
-  data.append('_captcha', 'false');
-
-  try {
-    const r = await fetch('https://formsubmit.co/ajax/admin@accessibledigital.com', {
-      method: 'POST',
-      headers: { 'Accept': 'application/json' },
-      body: data
-    });
-    const res = await r.json();
-    if (res.success === 'true' || res.success === true) {
-      form.style.display = 'none';
-      msg.textContent = '✓ Demande envoyée ! Notre équipe vous répond sous 4h ouvrées.';
-      msg.className = 'form-msg success';
-    } else {
-      throw new Error('Erreur serveur');
+    // Anti-bot : timing
+    if (Date.now() - formStartTime < 2000) {
+      // bot probable, ignorer silencieusement
+      return;
     }
-  } catch {
-    msg.textContent = '✗ Une erreur est survenue. Appelez-nous directement au 07 56 95 29 29.';
-    msg.className = 'form-msg error';
-    btn.textContent = 'Envoyer ma demande →';
-    btn.disabled = false;
-  }
-});
-</script>
+
+    // Anti-bot : honeypot _gotcha
+    const gotcha = form.querySelector('input[name="_gotcha"]');
+    if (gotcha && gotcha.value) return;
+
+    // Anti-bot : Turnstile token
+    const tsResp = form.querySelector('[name="cf-turnstile-response"]');
+    if (!tsResp || !tsResp.value) {
+      const errorEl = document.getElementById('form-error');
+      if (errorEl) {
+        errorEl.textContent = '✗ Veuillez compléter la vérification anti-robot avant d\'envoyer.';
+        errorEl.style.display = 'block';
+      } else {
+        alert('Veuillez compléter la vérification anti-robot.');
+      }
+      return;
+    }
+
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+
+    const btn = form.querySelector('[type="submit"]');
+    if (btn.disabled) return;
+    const origText = btn.textContent;
+    btn.textContent = 'Envoi en cours…';
+    btn.disabled = true;
+
+    const successEl = document.getElementById('form-success');
+    const errorEl   = document.getElementById('form-error');
+    if (errorEl) errorEl.style.display = 'none';
+
+    try {
+      const data = new FormData(form);
+      const res = await fetch('https://formsubmit.co/ajax/admin@accessibledigital.com', {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        body: data,
+      });
+      const json = await res.json();
+      if (json.success === 'true' || json.success === true) {
+        form.reset();
+        form.style.display = 'none';
+        if (successEl) successEl.style.display = 'block';
+      } else {
+        throw new Error('Formsubmit non-success');
+      }
+    } catch (err) {
+      btn.textContent = origText;
+      btn.disabled = false;
+      if (errorEl) errorEl.style.display = 'block';
+    }
+  });
+})();</script>
 
 </body>
 </html>
